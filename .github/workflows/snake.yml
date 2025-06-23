@@ -1,13 +1,13 @@
 name: GitHub Snake Game
 on:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 0 * **"
   workflow_dispatch:
   push:
     branches:
       - main
 permissions:
-  contents: write
+  contents: write  # 👈 добавь эту строку, чтобы GitHub Actions мог пушить
 jobs:
   generate:
     runs-on: ubuntu-latest
@@ -18,12 +18,16 @@ jobs:
       - name: Generate GitHub Contributions Snake Animations
         uses: Platane/snk@v3
         with:
-          # Используем пользователя с высокой активностью вместо своего
-          github_user_name: torvalds
+          github_user_name: ${{ github.repository_owner }}
           outputs: |
             dist/github-snake.svg
             dist/github-snake-dark.svg?palette=github-dark
-            dist/ocean.gif?color_snake=orange&color_dots=#bfd6f6,#8dbdff,#64a1f4,#4b91f1,#3c7dd9
+            dist/ocean.gif?color_snake=orange&color_dots=
+#bfd6f6,
+#8dbdff,
+#64a1f4,
+#4b91f1,
+#3c7dd9
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy to Output Branch
